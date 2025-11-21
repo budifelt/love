@@ -183,7 +183,7 @@ const cancelCreateBtn = document.getElementById("cancelCreate");
 
 // Storage & Sync configuration
 const STORAGE_PREFIX = "loveCalendarPosts:"; // legacy prefix (tidak dipakai lagi untuk localStorage)
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzXLWAmHqCPch3zKIBcaeok6V547GcsA0y61MW6pTkmw1JXsGqFTpyOJPjjIbvVyExmrA/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyPaADJ5kXX7w9o80orsNOQfRagTJ8pQRJKjwUHLdbk6iM4Rt3_nnyFPMnYyf9ye9atow/exec";
 
 const DB_NAME = "LoveCalendarDB";
 const DB_VERSION = 1;
@@ -367,7 +367,7 @@ async function deleteQueued(id) {
 async function sendToGAS(post) {
   if (!GAS_URL) return { status: "skip" };
 
-  const res = await fetch( GAS_URL, { mode: "no-cors", 
+  const res = await fetch(GAS_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(post)
