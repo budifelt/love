@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kalender Cinta</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Layer animasi hati & sparkle -->
+  <div id="heartLayer" class="heart-layer"></div>
+  <div id="sparkleLayer" class="sparkle-layer"></div>
+
+  <div class="wrapper">
+    <div class="top-bar">
+      <div class="title-group">
+        <h2>Kalender Cinta</h2>
+        <span>Setiap hari selalu ada alasan baru buat makin cinta 💘</span>
+      </div>
+
+      <div class="month-nav">
+        <button class="nav-btn" id="prevBtn">
+          <span>⟵</span> Prev
+        </button>
+        <div class="month-display" id="monthDisplay"></div>
+        <button class="nav-btn" id="nextBtn">
+          Next <span>⟶</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="weekday-row">
+      <div class="weekday weekend">Min</div>
+      <div class="weekday">Sen</div>
+      <div class="weekday">Sel</div>
+      <div class="weekday">Rab</div>
+      <div class="weekday">Kam</div>
+      <div class="weekday">Jum</div>
+      <div class="weekday weekend">Sab</div>
+    </div>
+
+    <div class="calendar-grid" id="calendarGrid"></div>
+  </div>
+
+  <!-- 🌸 MODAL MOMENT FEED -->
+  <div id="noteModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalDateTitle">Momen</h3>
+        <button id="closeModal" type="button" class="close-btn">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Feed momen per tanggal -->
+        <div id="postsContainer" class="posts-container"></div>
+
+        <!-- Tombol add moment di feed -->
+        <button id="addMomentBtn" type="button" class="add-moment-btn">
+          + Add Moment
+        </button>
+
+        <!-- Panel create / edit post -->
+        <div id="createPanel" class="create-panel hidden">
+          <input
+            id="postTitle"
+            type="text"
+            class="title-input"
+            placeholder="Judul momen"
+          />
+          <input
+            id="postLovedBy"
+            type="text"
+            class="title-input"
+            placeholder="Loved by"
+          />
+
+          <div class="editor-toolbar" id="editorToolbar">
+            <button type="button" onclick="formatText('bold')"><b>B</b></button>
+            <button type="button" onclick="formatText('italic')"><i>I</i></button>
+            <button type="button" onclick="formatText('underline')"><u>U</u></button>
+            <button type="button" onclick="changeFontSize()">Aᐧ</button>
+
+
+            <input type="color" id="colorPicker" title="Warna teks" />
+
+            <button type="button" onclick="toggleEmojiPicker()">😊</button>
+            <button type="button" onclick="insertImage()">📷</button>
+            <button type="button" onclick="clearEditor()">🧹</button>
+          </div>
+
+          <div id="emojiPicker" class="emoji-picker hidden">
+            <button type="button" onclick="insertEmoji('💕')">💕</button>
+            <button type="button" onclick="insertEmoji('💗')">💗</button>
+            <button type="button" onclick="insertEmoji('💞')">💞</button>
+            <button type="button" onclick="insertEmoji('💘')">💘</button>
+            <button type="button" onclick="insertEmoji('💌')">💌</button>
+            <button type="button" onclick="insertEmoji('🥹')">🥹</button>
+          </div>
+
+          <div id="editor" class="editor" contenteditable="true"></div>
+
+          <input type="file" id="imageInput" accept="image/*" hidden multiple />
+
+          <div class="create-footer">
+            <button id="cancelCreate" type="button" class="ghost-btn">
+              Batal
+            </button>
+            <button id="postBtn" type="button" class="save-btn">
+              Post
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- Mini modal view-only untuk judul momen -->
+  <div id="titleModal" class="mini-modal hidden">
+    <div class="mini-card">
+      <div class="mini-header">
+        <h4 id="miniTitle"></h4>
+        <button id="miniClose" type="button" class="close-btn mini-close">✕</button>
+      </div>
+      <div id="miniMeta" class="mini-meta"></div>
+      <div id="miniContent" class="mini-content"></div>
+      <div class="mini-footer">
+        <button id="miniEdit" type="button" class="ghost-btn mini-action">Edit</button>
+        <button id="miniDelete" type="button" class="save-btn mini-action">Hapus</button>
+      </div>
+    </div>
+  </div>
+
+<script src="script.js"></script>
+</body>
+</html>
