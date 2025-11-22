@@ -455,6 +455,129 @@ button.nav-btn:active {
   }
 }
 
+
+/* ===== MINI MODAL TITLE VIEW (Opsi A) ===== */
+.mini-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.mini-modal.hidden {
+  display: none;
+}
+
+.mini-card {
+  background: radial-gradient(circle at top, rgba(255,234,244,0.98), rgba(255,208,234,0.96));
+  border-radius: 20px;
+  padding: 14px 16px 12px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow:
+    0 14px 34px rgba(255, 110, 160, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
+}
+
+.mini-card::before,
+.mini-card::after {
+  content: "♥";
+  position: absolute;
+  font-size: 52px;
+  color: rgba(255, 192, 218, 0.35);
+  pointer-events: none;
+}
+
+.mini-card::before {
+  top: -16px;
+  right: 8px;
+}
+
+.mini-card::after {
+  bottom: -18px;
+  left: 10px;
+}
+
+.mini-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.mini-header h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #6a264a;
+}
+
+.mini-close {
+  font-size: 16px;
+}
+
+.mini-meta {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #b17093;
+  position: relative;
+  z-index: 1;
+}
+
+.mini-content {
+  margin-top: 8px;
+  max-height: 360px;
+  overflow-y: auto;
+  font-size: 13px;
+  color: #5a2341;
+  position: relative;
+  z-index: 1;
+}
+
+.mini-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 6px 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.mini-footer {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.mini-action {
+  font-size: 12px;
+  padding-inline: 12px;
+}
+
+/* Toolbar selects */
+.toolbar-select {
+  padding: 3px 6px;
+  border-radius: 8px;
+  border: 1px solid #d8a7c3;
+  background: rgba(255, 234, 247, 0.95);
+  font-size: 11px;
+  color: #7b345b;
+  outline: none;
+}
+.toolbar-select:focus {
+  box-shadow: 0 0 0 1px rgba(255, 140, 180, 0.8);
+  border-color: #ff8ab7;
+}
 /* ===== MODAL & FEED ===== */
 
 .modal {
@@ -612,6 +735,13 @@ button.nav-btn:active {
   margin-top: 2px;
 }
 
+
+.post-sync-indicator {
+  font-size: 10px;
+  color: #b17093;
+  margin-left: 4px;
+  opacity: 0.9;
+}
 .post-actions {
   display: flex;
   gap: 4px;

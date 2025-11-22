@@ -180,6 +180,17 @@ const colorPicker = document.getElementById("colorPicker");
 const postBtn = document.getElementById("postBtn");
 const cancelCreateBtn = document.getElementById("cancelCreate");
 
+// Mini modal elements (title view-only)
+const miniModal = document.getElementById("miniModal");
+const miniTitleEl = document.getElementById("miniTitle");
+const miniMetaEl = document.getElementById("miniMeta");
+const miniContentEl = document.getElementById("miniContent");
+const miniCloseBtn = document.getElementById("miniClose");
+const miniEditBtn = document.getElementById("miniEdit");
+const miniDeleteBtn = document.getElementById("miniDelete");
+let miniCurrentIndex = null;
+
+
 
 // Storage & Sync configuration
 const STORAGE_PREFIX = "loveCalendarPosts:"; // legacy prefix (tidak dipakai lagi untuk localStorage)
@@ -451,6 +462,72 @@ function formatPostTime(iso) {
   return `${day} ${mon[month]} ${year}, ${hh}:${mm}`;
 }
 
+
+// ===============================
+//       MINI MODAL HANDLERS
+// ===============================
+function openMiniModal(index) {
+  const post = currentPosts[index];
+  if (!post || !miniModal) return;
+
+  miniCurrentIndex = index;
+  miniTitleEl.textContent = post.title || "";
+
+  let meta = formatPostTime(post.createdAt);
+  if (post.lovedBy) meta += " · Loved by " + escapeHtml(post.lovedBy);
+  if (post.pinned) meta += " · 📌";
+  miniMetaEl.innerHTML = meta;
+
+  miniContentEl.innerHTML = post.content || "";
+  miniModal.classList.remove("hidden");
+}
+
+function closeMiniModal() {
+  if (!miniModal) return;
+  miniModal.classList.add("hidden");
+  miniCurrentIndex = null;
+}
+
+if (miniCloseBtn) {
+  miniCloseBtn.addEventListener("click", closeMiniModal);
+}
+
+if (miniEditBtn) {
+  miniEditBtn.addEventListener("click", () => {
+    if (miniCurrentIndex === null) return;
+    const post = currentPosts[miniCurrentIndex];
+    if (!post) return;
+
+    closeMiniModal();
+
+    editingIndex = miniCurrentIndex;
+    postTitleInput.value = post.title || "";
+    postLovedByInput.value = post.lovedBy || "";
+    editor.innerHTML = post.content || "";
+    isPlaceholderActive = false;
+    editor.classList.remove("empty");
+
+    enterCreateMode(true);
+  });
+}
+
+if (miniDeleteBtn) {
+  miniDeleteBtn.addEventListener("click", async () => {
+    if (miniCurrentIndex === null) return;
+    if (!confirm("Hapus momen ini?")) return;
+
+    currentPosts.splice(miniCurrentIndex, 1);
+    await savePosts();
+    closeMiniModal();
+
+    if (!currentPosts.length) {
+      enterCreateMode(false);
+    } else {
+      renderPostsList();
+    }
+  });
+}
+
 // ===============================
 //        RENDER POST LIST
 // ===============================
@@ -492,7 +569,7 @@ function renderPostsList() {
           </div>
         </div>
         <div class="post-actions">
-          <button class="post-pin">${post.pinned ? "💖" : "📌"}</button>
+          <button class="post-pin">${post.pinned ? "💖" : "📌"}</button><span class="post-sync-indicator" data-id="${post.id || ""}">•</span>
           <button class="post-edit">Edit</button>
           <button class="post-delete">Hapus</button>
         </div>
@@ -619,6 +696,15 @@ postsContainer.addEventListener("click", async (e) => {
   const edt = e.target.closest(".post-edit");
   const tog = e.target.closest(".toggle-post");
   const pin = e.target.closest(".post-pin");
+  const titleEl = e.target.closest(".post-title");
+
+  // Title click -> open mini modal
+  if (titleEl) {
+    const card = titleEl.closest(".post-card");
+    const idx = Number(card.dataset.index);
+    openMiniModal(idx);
+    return;
+  }
 
   // Delete
   if (del) {
@@ -706,6 +792,40 @@ cancelCreateBtn.addEventListener("click", () => {
 function formatText(cmd) {
   clearPlaceholderIfNeeded();
   document.execCommand(cmd, false, null);
+  editor.focus();
+}
+
+
+function applyFontSize() {
+  clearPlaceholderIfNeeded();
+  const select = document.getElementById("fontSizeSelect");
+  if (!select) return;
+  let val = select.value;
+  if (val === "custom") {
+    const custom = prompt("Font size? contoh: 18px atau 1.2em", "16px");
+    if (!custom) return;
+    val = custom;
+  }
+  document.execCommand("fontSize", false, "7");
+  const spans = editor.querySelectorAll("font[size='7']");
+  spans.forEach((s) => {
+    s.removeAttribute("size");
+    s.style.fontSize = val;
+  });
+  editor.focus();
+}
+
+function applyFontFamily() {
+  clearPlaceholderIfNeeded();
+  const select = document.getElementById("fontFamilySelect");
+  if (!select) return;
+  const family = select.value;
+  if (!family) return;
+  if (family === "inherit") {
+    document.execCommand("removeFormat", false, null);
+  } else {
+    document.execCommand("fontName", false, family);
+  }
   editor.focus();
 }
 
